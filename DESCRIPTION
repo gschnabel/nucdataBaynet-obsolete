@@ -1,0 +1,20 @@
+Package: nucdataBaynet
+Type: Package
+Title: Nuclear Data Evaluation Using a Bayesian Network
+Version: 0.1.0
+Author: Georg Schnabel [aut, cre]
+Maintainer: Georg Schnabel <georg.schnabel@nucleardata.com>
+Description: This package enables the modelisation of statistical
+    and systematic experimental errors, model defects, and
+    parameter uncertainties as multivariate normal distributions.
+    It provides functions for inference on the values of parameters
+    and errors treating the system as a Bayesian network.
+License: GPL (>= 3) 
+URL: https://www.r-project.org, https://github.com/gschnabel/nucdataBaynet
+BugReports: https://github.com/gschnabel/nucdataBaynet/issues
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+Imports: data.table,
+         Matrix
+RoxygenNote: 6.0.1
