@@ -48,7 +48,7 @@ createSysCompNormHandler <- function(dataref = NULL) {
   }
 
 
-  createSysDt <- function(expIds, vals, uncs) {
+  createSysDt <- function() {
 
     assocDt[, list(EXPID = expid,
                    DIDX = 1L,
