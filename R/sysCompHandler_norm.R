@@ -34,7 +34,7 @@ createSysCompNormHandler <- function(dataref = NULL) {
     stopifnot(is.character(levels))
     stopifnot(is.numeric(vals))
     stopifnot(is.numeric(uncs))
-    newDt <- data.table(expid = paste0("NORM-", category, "-", levels),
+    newDt <- data.table(expid = paste0(category, "-", levels),
                         cat = category,
                         lev = levels,
                         val = vals,
@@ -82,7 +82,7 @@ createSysCompNormHandler <- function(dataref = NULL) {
 
     moltenExpDt <- melt(expDt, id.vars = c("IDX", dataref), measure.vars = uniqueCats,
                      variable.name = "CAT", value.name = "LEV")
-    moltenExpDt[, EXPID := paste("NORM", CAT, LEV, sep="-")]
+    moltenExpDt[, EXPID := paste(CAT, LEV, sep="-")]
     moltenExpDt[, DATAREF := get(dataref)]
     setnames(moltenExpDt, "IDX", "IDX1")
 
