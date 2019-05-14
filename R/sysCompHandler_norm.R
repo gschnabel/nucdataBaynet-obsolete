@@ -34,7 +34,7 @@ createSysCompNormHandler <- function(dataref = NULL) {
     stopifnot(is.character(levels))
     stopifnot(is.numeric(vals))
     stopifnot(is.numeric(uncs))
-    newDt <- data.table(expid = paste0(category, "-", levels),
+    newDt <- data.table(expid = paste0("NORM-", category, "-", levels),
                         cat = category,
                         lev = levels,
                         val = vals,
@@ -74,30 +74,29 @@ createSysCompNormHandler <- function(dataref = NULL) {
     stopifnot(all(sysDt$ERRTYPE == "sys-abs" | sysDt$ERRTYPE == "sys-rel"))
     stopifnot("IDX" %in% colnames(expDt),
               "IDX" %in% colnames(sysDt))
-    if (! dataref %in% names(expDt))
+    if (any(sysDt$ERRTYPE == "sys-rel") && ! dataref %in% names(expDt))
       stop(paste0("Column ", dataref, " specified as reference data ",
-                  "must be present in expDt even if all ERRTYPE == sys-abs (in this case reference data is not used)"))
-    setkey(assocDt, cat, lev)
-    extSysDt <- merge(sysDt[, list(EXPID = EXPID, IDX2 = IDX, ERRTYPE = ERRTYPE)],
-                      assocDt[, list(EXPID = expid, cat, lev)], by = "EXPID")
-    uniqueCats <- unique(extSysDt[, cat])
-    extExpDt <- expDt[, c("IDX", "EXPID", "DIDX", dataref, uniqueCats), with=FALSE]
+                  "must be present in expDt if any ERRTYPE == sys-abs"))
+    
+    uniqueCats <- unique(assocDt$cat)
 
-    setnames(extExpDt, "IDX", "IDX1")
-    extExpDt <- melt(extExpDt, id.vars = c("IDX1", "EXPID", "DIDX", dataref),
-                     measure.vars = uniqueCats, variable.name = "cat", value.name = "lev")
+    moltenExpDt <- melt(expDt, id.vars = c("IDX", dataref), measure.vars = uniqueCats,
+                     variable.name = "CAT", value.name = "LEV")
+    moltenExpDt[, EXPID := paste("NORM", CAT, LEV, sep="-")]
+    moltenExpDt[, DATAREF := get(dataref)]
+    setnames(moltenExpDt, "IDX", "IDX1")
 
-    resDt <- merge(extExpDt[, list(IDX1, cat, lev, REFDATA = get(dataref))],
-                   extSysDt[, list(IDX2, cat, lev, ERRTYPE)], by=c("cat", "lev"))
-    resDt[, cat := NULL]
-    resDt[, lev := NULL]
-    resDt[, X := ifelse(ERRTYPE == "sys-abs", 1, REFDATA)]
+    resDt <- merge(moltenExpDt, sysDt, by = "EXPID")
+    setnames(resDt, "IDX", "IDX2")
+    resDt <- resDt[, list(IDX1, IDX2, ERRTYPE, DATAREF)]
+    resDt[, X := ifelse(ERRTYPE == "sys-abs", 1, DATAREF)]
+    resDt[, DATAREF := NULL]
     resDt[, ERRTYPE := NULL]
-    resDt[, REFDATA := NULL]
 
     resDims <- c(nrow(expDt), nrow(sysDt))
     returnSparseMatrix(resDt, resDims, ret.mat)
   }
+
 
   list(addSysUnc = addSysUnc,
        createSysDt = createSysDt,
