@@ -18,7 +18,7 @@
 #' Create Handler for Systematic Model Components
 #'
 #' @return TODO
-#' @import data.table Matrix
+#' @import data.table Matrix methods
 #' @export
 createSysCompModelHandler <- function() {
 

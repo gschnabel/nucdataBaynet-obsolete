@@ -22,7 +22,7 @@
 #' @param ret.mat TODO
 #'
 #' @return TODO
-#' @import data.table Matrix
+#' @import data.table Matrix methods
 #' @export
 #'
 pwMap <- function(expEn, opts = NULL, ret.mat = TRUE) {
