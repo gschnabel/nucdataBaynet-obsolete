@@ -72,7 +72,7 @@ createSysCompGPHandler <- function() {
 
       covMat <- curSigma^2 * exp(-0.5/curLen^2 * (outer(EN, EN, `-`))^2)
       diag(covMat) <- diag(covMat) + curNugget^2
-      list(IDX1 = IDX, IDX2 = rep(IDX, each=length(IDX)), X = as.vector(covMat))
+      list(IDX1 = rep(IDX, length(IDX)), IDX2 = rep(IDX, each=length(IDX)), X = as.vector(covMat))
     }, by="EXPID"]
     resDt[,EXPID := NULL]
     resDims <- c(nrow(sysDt), nrow(sysDt))
