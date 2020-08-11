@@ -13,4 +13,4 @@ Usage examples can be found in the repository *eval-fe56* containing the scripts
 More specifically, the tuning of experimental normalization uncertainties in step four and the adjustment of the hyperparameters imposed on energy-dependent TALYS model parameters in step six, and the adjustment of Talys parameters in step seven relied on the functionality of this package. 
 
 The interface of this package will probably change in the future.
-This version is nevertheless kept for documenting purposes and guarantee the reproducibility of the prototype pipeline.
+This version is nevertheless kept for documentation purposes and to guarantee the reproducibility of the prototype pipeline.
